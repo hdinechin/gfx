@@ -418,6 +418,7 @@ struct GfxInstance
     GfxConstRef<GfxMaterial> material;
     GfxConstRef<GfxSkin>     skin;
     std::vector<float>       weights;
+    std::string              neural_material_index;
 
     glm::mat4 transform = glm::mat4(1.0f);
 };
