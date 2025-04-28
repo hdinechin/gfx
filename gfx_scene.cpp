@@ -2520,27 +2520,15 @@ private:
                 {
                     format = DXGI_FORMAT_BC1_UNORM;
                 }
-                else if(header.pixelFormat.fourCC == MAKE_FOURCC('D', 'X', 'T', '3'))
+                else if(header.pixelFormat.fourCC == MAKE_FOURCC('D', 'X', 'T', '3') || header.pixelFormat.fourCC == MAKE_FOURCC('D', 'X', 'T', '4'))
                 {
                     format = DXGI_FORMAT_BC2_UNORM;
                 }
-                else if(header.pixelFormat.fourCC == MAKE_FOURCC('D', 'X', 'T', '5'))
+                else if(header.pixelFormat.fourCC == MAKE_FOURCC('D', 'X', 'T', '5') || header.pixelFormat.fourCC == MAKE_FOURCC('D', 'X', 'T', '6'))
                 {
                     format = DXGI_FORMAT_BC3_UNORM;
                 }
-                else if(header.pixelFormat.fourCC == MAKE_FOURCC('D', 'X', 'T', '4'))
-                {
-                    format = DXGI_FORMAT_BC2_UNORM;
-                }
-                else if(header.pixelFormat.fourCC == MAKE_FOURCC('D', 'X', 'T', '5'))
-                {
-                    format = DXGI_FORMAT_BC3_UNORM;
-                }
-                else if(header.pixelFormat.fourCC == MAKE_FOURCC('A', 'T', 'I', '1'))
-                {
-                    format = DXGI_FORMAT_BC4_UNORM;
-                }
-                else if(header.pixelFormat.fourCC == MAKE_FOURCC('B', 'C', '4', 'U'))
+                else if(header.pixelFormat.fourCC == MAKE_FOURCC('A', 'T', 'I', '1') || header.pixelFormat.fourCC == MAKE_FOURCC('B', 'C', '4', 'U'))
                 {
                     format = DXGI_FORMAT_BC4_UNORM;
                 }
@@ -2548,11 +2536,7 @@ private:
                 {
                     format = DXGI_FORMAT_BC4_SNORM;
                 }
-                else if(header.pixelFormat.fourCC == MAKE_FOURCC('A', 'T', 'I', '2'))
-                {
-                    format = DXGI_FORMAT_BC5_UNORM;
-                }
-                else if(header.pixelFormat.fourCC == MAKE_FOURCC('B', 'C', '5', 'U'))
+                else if(header.pixelFormat.fourCC == MAKE_FOURCC('A', 'T', 'I', '2') || header.pixelFormat.fourCC == MAKE_FOURCC('B', 'C', '5', 'U'))
                 {
                     format = DXGI_FORMAT_BC5_UNORM;
                 }
@@ -2729,6 +2713,7 @@ private:
         return kGfxResult_NoError;
     }
 
+#ifdef GFX_ENABLE_SCENE_KTX
     static inline KTX_error_code IterateKtxImage(int32_t, int32_t, int32_t, int32_t, int32_t,
         ktx_uint64_t faceLodSize, void *pixels, void *userdata)
     {
@@ -2847,6 +2832,7 @@ private:
         ktxTexture_Destroy((ktxTexture*)ktx_texture);
         return kGfxResult_NoError;
     }
+#endif
 
     GfxResult importExr(GfxScene const& scene, char const* asset_file)
     {

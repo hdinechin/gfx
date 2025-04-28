@@ -2722,7 +2722,7 @@ public:
         char const last_char = file_path[strlen(file_path) - 1];
         char const *path_separator = (last_char == '/' || last_char == '\\' ? "" : "/");
         GFX_SNPRINTF(program.name, sizeof(program.name), "%s%s%s", file_path, path_separator, file_name);
-        shader_model = (shader_model != nullptr ? shader_model : dxr_device_ != nullptr ? "6_5" : "6_0");
+        shader_model = (shader_model != nullptr ? shader_model : dxr_device_ != nullptr ? "6_8" : "6_0");
         program.handle = program_handles_.allocate_handle();
         Program &gfx_program = programs_.insert(program);
         gfx_program.shader_model_ = shader_model;
@@ -2741,7 +2741,7 @@ public:
             GFX_SNPRINTF(program.name, sizeof(program.name), "%s", name);
         else
             GFX_SNPRINTF(program.name, sizeof(program.name), "gfx_Program%llu", program.handle);
-        shader_model = (shader_model != nullptr ? shader_model : dxr_device_ != nullptr ? "6_5" : "6_0");
+        shader_model = (shader_model != nullptr ? shader_model : dxr_device_ != nullptr ? "6_8" : "6_0");
         Program &gfx_program = programs_.insert(program);
         gfx_program.shader_model_ = shader_model;
         gfx_program.file_path_ = (name != nullptr ? name : program.name);
@@ -4593,7 +4593,7 @@ public:
                 {
                     GFX_TRY(resizeCallback(window_width, window_height)); // reset fence index
                 }
-                if(fences_[fence_index_]->GetCompletedValue() < fence_values_[fence_index_])
+                if(fences_[fence_index_]->GetCompletedValue() != fence_values_[fence_index_])
                 {
                     fences_[fence_index_]->SetEventOnCompletion(fence_values_[fence_index_], fence_event_);
                     WaitForSingleObject(fence_event_, INFINITE);    // wait for GPU to complete
@@ -4612,7 +4612,7 @@ public:
                 command_queue_->ExecuteCommandLists(ARRAYSIZE(command_lists), command_lists);
                 command_queue_->Signal(fences_[fence_index_], ++fence_values_[fence_index_]);
                 fence_index_ = (fence_index_ + 1) % max_frames_in_flight_;
-                if(fences_[fence_index_]->GetCompletedValue() < fence_values_[fence_index_])
+                if(fences_[fence_index_]->GetCompletedValue() != fence_values_[fence_index_])
                 {
                     fences_[fence_index_]->SetEventOnCompletion(fence_values_[fence_index_], fence_event_);
                     WaitForSingleObject(fence_event_, INFINITE);    // wait for GPU to complete
@@ -9489,7 +9489,7 @@ private:
         for(uint32_t i = 0; i < max_frames_in_flight_; ++i)
         {
             command_queue_->Signal(fences_[i], ++fence_values_[i]);
-            if(fences_[i]->GetCompletedValue() < fence_values_[i])
+            if(fences_[i]->GetCompletedValue() != fence_values_[i])
             {
                 fences_[i]->SetEventOnCompletion(fence_values_[i], fence_event_);
                 WaitForSingleObject(fence_event_, INFINITE);    // wait for GPU to complete
